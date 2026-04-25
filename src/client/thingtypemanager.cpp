@@ -494,4 +494,31 @@ const ThingTypeList& ThingTypeManager::getThingTypes(ThingCategory category)
     return m_thingTypes[category];
 }
 
+void ThingTypeManager::addAliasThingType(uint16 newId, uint16 sourceId, ThingCategory category)
+{
+    if(category >= ThingLastCategory) {
+        g_logger.error(stdext::format("addAliasThingType: invalid category %d", category));
+        return;
+    }
+    ThingTypeList& list = m_thingTypes[category];
+
+    // Source must already exist and be a real (non-null) entry.
+    if(sourceId >= list.size() || !list[sourceId] || list[sourceId] == m_nullThingType) {
+        g_logger.error(stdext::format("addAliasThingType: source id %d not loaded in category %d",
+            sourceId, category));
+        return;
+    }
+
+    // Resize destination range if necessary, padding with the null type so any
+    // ids in between still respond to isValidDatId / getThingType safely.
+    if(newId >= list.size())
+        list.resize(newId + 1, m_nullThingType);
+
+    // Share the existing ThingType pointer for the new id.
+    list[newId] = list[sourceId];
+
+    g_logger.info(stdext::format("addAliasThingType: aliased id %d -> %d (category %d)",
+        newId, sourceId, category));
+}
+
 /* vim: set ts=4 sw=4 et: */

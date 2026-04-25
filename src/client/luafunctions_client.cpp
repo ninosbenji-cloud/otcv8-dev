@@ -79,6 +79,7 @@ void Client::registerLuaFunctions()
     g_lua.bindSingletonFunction("g_things", "findItemTypeByCategory", &ThingTypeManager::findItemTypeByCategory, &g_things);
     g_lua.bindSingletonFunction("g_things", "findThingTypeByAttr", &ThingTypeManager::findThingTypeByAttr, &g_things);
     g_lua.bindSingletonFunction("g_things", "getMarketCategories", &ThingTypeManager::getMarketCategories, &g_things);
+    g_lua.bindSingletonFunction("g_things", "addAliasThingType", &ThingTypeManager::addAliasThingType, &g_things);
     
     g_lua.registerSingletonClass("g_houses");
     g_lua.bindSingletonFunction("g_houses", "clear",          &HouseManager::clear,          &g_houses);

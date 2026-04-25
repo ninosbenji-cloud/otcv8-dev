@@ -92,6 +92,13 @@ public:
     bool isValidDatId(uint16 id, ThingCategory category) { return id >= 1 && id < m_thingTypes[category].size(); }
     bool isValidOtbId(uint16 id) { return id >= 1 && id < m_itemTypes.size(); }
 
+    // Aliases an unknown ThingType id to an existing one in the same category by
+    // sharing the underlying ThingTypePtr. Used to map server-only custom item
+    // ids (e.g. 30001-30005) onto sprites that already exist in Tibia.dat so the
+    // protocol parser can resolve them. The source id must already be loaded
+    // (i.e. loadDat() must have run). Idempotent: re-aliasing replaces.
+    void addAliasThingType(uint16 newId, uint16 sourceId, ThingCategory category);
+
 private:
     ThingTypeList m_thingTypes[ThingLastCategory];
     ItemTypeList m_reverseItemTypes;
